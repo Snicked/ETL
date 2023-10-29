@@ -1,5 +1,5 @@
 # ETL Extended
-WoW Classic 1.12 Addon
+WoW Vanilla 1.12 addon
 ## Description
 Draggable dialog showing time to level up, xp per hour and remaining kills to level up.
 
