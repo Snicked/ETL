@@ -1,6 +1,7 @@
 # ETL Extended
-## Estimation to level
-Tooltip showing hours until level up, xp per hour and remaining kills to level up.
+WoW Classic 1.12 Addon
+## Description
+Draggable dialog showing time to level up, xp per hour and remaining kills to level up.
 
 [<img src="docs/preview.png">](https://github.com/Snicked/ETL)
 
