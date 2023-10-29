@@ -21,6 +21,7 @@ function ETL_on_load()
 			xp_gain.t = xp_gain.t - t0
 		end
 	end
+	ETL_frame:SetBackdropColor(0,0,0,.8)
 end
 
 function ETL_on_update()
@@ -30,29 +31,47 @@ function ETL_on_update()
 			tremove(ETL_xp_gains)
 		end
 		local xp_per_hour = 0
+		local allXp = 0
+		local counter = 0
+		local average = 0
 		for _, xp_gain in ipairs(ETL_xp_gains) do
 			xp_per_hour = xp_per_hour + xp_gain.xp
+			allXp = allXp + xp_gain.xp
+			counter = counter + 1
 		end
-		local etl = (UnitXPMax('player') - UnitXP('player')) / xp_per_hour * 60
+		if counter > 0 then
+			average = allXp / counter
+		end
+    if ETL_xp_gains[1] then
+      local offset = (GetTime() - ETL_xp_gains[1].t)
+      xp_per_hour = (xp_per_hour / offset) * 3600
+    end
+    local remainingXp=(UnitXPMax('player') - UnitXP('player'));
+		local etl =  remainingXp / xp_per_hour *  60
 		local etl_hours = math.floor(etl / 60)
 		local etl_minutes = math.ceil(etl - 60 * etl_hours)
-		update_display(xp_per_hour, etl_hours, etl_minutes)
+		local kills =	'N/A'
+    if average > 0 then 
+      kills = math.ceil(remainingXp / average )
+    end
+		update_display(xp_per_hour, etl_hours, etl_minutes,kills)
 	end
 end
 
-function update_display(xp_per_hour, etl_hours, etl_minutes)
+function update_display(xp_per_hour, etl_hours, etl_minutes, kills)
 	ETL_frame_html:SetText(string.format(
 			[[
 			<html>
 			<body>
-				<h1 align="center">ETL %s</h1>
-				<br/>
-				<h2 align="center">XP/hour %i</h2>
+				<h1 align="left">ETL %s</h1>
+				<h2 align="left">XP/hour %i</h2>
+				<h3 align="left">KTL %s</h3>
 			</body>
 			</html>
 			]],
 			xp_per_hour > 0 and string.format('%ih%im', etl_hours, etl_minutes) or 'N/A',
-			xp_per_hour
+			xp_per_hour,
+			kills
 	))
 end
 
